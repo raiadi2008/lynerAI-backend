@@ -1,5 +1,8 @@
 import { Router } from "express"
-import { signupController } from "../controllers/auth_controller"
+import {
+  signinController,
+  signupController,
+} from "../controllers/auth_controller"
 import AuthMiddlewares from "../middlewares/auth_middleware"
 
 const authRouter: Router = Router()
@@ -10,6 +13,11 @@ authRouter.post(
   AuthMiddlewares.validateEmail,
   AuthMiddlewares.checkEmailExists,
   signupController
+)
+authRouter.post(
+  "/login",
+  AuthMiddlewares.validateSigninRequest,
+  signinController
 )
 
 export default authRouter
