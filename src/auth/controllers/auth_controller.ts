@@ -3,7 +3,7 @@ import { signup } from "../../firebase/init"
 import {
   SignUpRequestInterface,
   SignUpResponseInterface,
-} from "../../types/auth/auth_types"
+} from "../types/auth_types"
 import AuthDB from "../db/auth_db"
 import { IUser } from "../model/auth_models"
 

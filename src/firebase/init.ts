@@ -6,8 +6,8 @@ import {
 } from "firebase/auth"
 import { AuthErrorCodes } from "firebase/auth"
 
-import { SignUpResponseInterface } from "../types/auth/auth_types"
-import { SignUpStatusEnum } from "../types/auth/auth_enums"
+import { SignUpResponseInterface } from "../auth/types/auth_types"
+import { SignUpStatusEnum } from "../auth/constants/auth_enums"
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,

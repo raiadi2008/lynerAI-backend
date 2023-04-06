@@ -1,4 +1,4 @@
-import { SignUpStatusEnum } from "./auth_enums"
+import { SignUpStatusEnum } from "../constants/auth_enums"
 
 /**
  * @interface SignInResponseInteface

@@ -1,5 +1,5 @@
 import { rejects } from "assert"
-import { SignUpRequestInterface } from "../../types/auth/auth_types"
+import { SignUpRequestInterface } from "../types/auth_types"
 import User, { IUser } from "../model/auth_models"
 
 /**

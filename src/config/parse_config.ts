@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv"
 import path from "path"
-import { DEV_ENV, PROD_ENV, UAT_ENV } from "../types/utils/env_constants.js"
+import { DEV_ENV, PROD_ENV, UAT_ENV } from "../utils/env_constants.js"
 
 if (process.env.NODE_ENV === DEV_ENV) {
   dotenv.config({ path: path.resolve(__dirname, "./.env.dev") })
