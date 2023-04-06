@@ -11,5 +11,3 @@ if (process.env.NODE_ENV === DEV_ENV) {
 } else {
   dotenv.config({ path: path.resolve(__dirname, "./.env") })
 }
-
-console.log("node env: ", process.env.PORT)

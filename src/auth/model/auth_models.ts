@@ -5,7 +5,7 @@ import mongoose, { Schema } from "mongoose"
  * @description Interface for User model that represents a document (user document) in mongodb
  */
 interface IUser {
-  user_id: string
+  _id: string
   email: string
   first_name: string
   last_name: string
@@ -16,7 +16,7 @@ interface IUser {
  * @description user schema corresponding to IUser interface
  */
 const UserSchema = new Schema<IUser>({
-  user_id: { type: String, required: true, unique: true },
+  _id: { type: String, default: () => "my-custom-id" },
   email: { type: String, required: true, unique: true },
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },

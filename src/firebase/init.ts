@@ -36,8 +36,6 @@ const signup = (
         })
       })
       .catch((error) => {
-        console.log("type of error", typeof error)
-        console.log("error", error)
         const errorCode = error.code
         if (errorCode === AuthErrorCodes.EMAIL_EXISTS) {
           // todo: if fails here raise an alarm
@@ -45,11 +43,13 @@ const signup = (
             reason: "Email already exists",
             status: SignUpStatusEnum.FAILURE,
           })
+          return
         }
         reject({
           reason: "Failed to create user",
           status: SignUpStatusEnum.FAILURE,
         })
+        return
       })
   })
 }
@@ -72,4 +72,4 @@ const sendVerificationEmail = (): Promise<boolean> => {
 
 const login = (email: string, password: string) => {}
 
-export { signup, sendEmailVerification, login }
+export { signup, sendVerificationEmail, login }
