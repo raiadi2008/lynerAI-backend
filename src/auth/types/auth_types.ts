@@ -1,4 +1,4 @@
-import { SignUpStatusEnum } from "./auth_enums"
+import { SignUpStatusEnum } from "../constants/auth_enums"
 
 /**
  * @interface SignInResponseInteface
@@ -14,8 +14,9 @@ export interface SignInResponseInterface {
  */
 
 export interface SignUpResponseInterface {
-  user_id: string
+  user_id?: string
   status: SignUpStatusEnum
+  reason?: string
 }
 
 /**
