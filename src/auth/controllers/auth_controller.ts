@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { signup } from "../../firebase/init"
+import { sendVerificationEmail, signup } from "../../firebase/init"
 import {
   SignUpRequestInterface,
   SignUpResponseInterface,
@@ -31,7 +31,14 @@ export const signupController = (req: Request, res: Response) => {
       } as IUser)
     })
     .then((db_response: IUser) => {
-      return res.status(HttpStatusCodes.CREATED).json(db_response)
+      res.status(HttpStatusCodes.CREATED).json(db_response)
+      return sendVerificationEmail()
+        .then((email_response) => {
+          console.log("email sent")
+        })
+        .catch((error) => {
+          console.log("email not sent")
+        })
     })
     .catch((error) => {
       const error_code = error.code || HttpStatusCodes.SERVER_ERROR

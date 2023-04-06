@@ -72,4 +72,4 @@ const sendVerificationEmail = (): Promise<boolean> => {
 
 const login = (email: string, password: string) => {}
 
-export { signup, sendEmailVerification, login }
+export { signup, sendVerificationEmail, login }
