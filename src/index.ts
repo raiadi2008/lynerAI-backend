@@ -1,11 +1,19 @@
 import express, { Express, Request, Response } from "express"
 
+import "./config/parse_config.js"
+import "./db/connect_db.js"
+// local imports
+import authRouter from "./auth/routers/auth_router.js"
+
 const app: Express = express()
+const port: number = Number(process.env.PORT) || 3000
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World is new lang!")
-})
+// middleware
+app.use(express.json({ limit: 1024 }))
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000")
+// routes
+app.use("", authRouter)
+
+app.listen(port, () => {
+  console.log(`app working on http://localhost:${port}`)
 })
