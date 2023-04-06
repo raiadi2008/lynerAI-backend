@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { sendVerificationEmail, signup } from "../../firebase/init"
+import { login, sendVerificationEmail, signup } from "../../firebase/init"
 import {
   SignUpRequestInterface,
   SignUpResponseInterface,
@@ -16,7 +16,6 @@ import { HttpStatusCodes } from "../../global_constants/constants"
  */
 
 export const signupController = (req: Request, res: Response) => {
-  console.log("this reached here bro as well")
   const user_info: SignUpRequestInterface = req.body
 
   // create user in firebase
@@ -39,6 +38,17 @@ export const signupController = (req: Request, res: Response) => {
         .catch((error) => {
           console.log("email not sent")
         })
+    })
+    .catch((error) => {
+      const error_code = error.code || HttpStatusCodes.SERVER_ERROR
+      return res.status(error_code).json(error)
+    })
+}
+
+export const signinController = (req: Request, res: Response) => {
+  login(req.body.email, req.body.password)
+    .then((response) => {
+      res.status(HttpStatusCodes.OK).json(response)
     })
     .catch((error) => {
       const error_code = error.code || HttpStatusCodes.SERVER_ERROR

@@ -5,7 +5,10 @@ import {
   HttpStatusCodes,
 } from "../../global_constants/constants"
 import AuthDB from "../db/auth_db"
-import { SignUpRequestInterface } from "../types/auth_types"
+import {
+  SignInRequestInterface,
+  SignUpRequestInterface,
+} from "../types/auth_types"
 
 const validateEmail = (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body
@@ -49,10 +52,25 @@ const validateSignupRequest = (
   } else next()
 }
 
+const validateSigninRequest = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { email, password } = req.body as SignInRequestInterface
+
+  if (!email || !password) {
+    return res
+      .status(HttpStatusCodes.BAD_REQUEST)
+      .json({ error: "Missing required parameters" })
+  } else next()
+}
+
 const AuthMiddlewares = {
   validateEmail,
   checkEmailExists,
   validateSignupRequest,
+  validateSigninRequest,
 }
 
 export default AuthMiddlewares

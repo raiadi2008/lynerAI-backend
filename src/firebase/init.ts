@@ -3,11 +3,21 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  signInWithEmailAndPassword,
+  UserCredential,
+  User,
 } from "firebase/auth"
 import { AuthErrorCodes } from "firebase/auth"
 
-import { SignUpResponseInterface } from "../auth/types/auth_types"
-import { SignUpStatusEnum } from "../auth/constants/auth_enums"
+import {
+  AuthRejectionInterface,
+  SignInResponseInterface,
+  SignUpResponseInterface,
+} from "../auth/types/auth_types"
+import {
+  AuthStatusEnum,
+  AuthStatusReasonEnum,
+} from "../auth/constants/auth_enums"
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -32,7 +42,7 @@ const signup = (
         const user = userCredential.user
         resolve({
           user_id: user.uid,
-          status: SignUpStatusEnum.SUCCESS,
+          status: AuthStatusEnum.SUCCESS,
         })
       })
       .catch((error) => {
@@ -41,14 +51,14 @@ const signup = (
           // todo: if fails here raise an alarm
           reject({
             reason: "Email already exists",
-            status: SignUpStatusEnum.FAILURE,
-          })
+            status: AuthStatusEnum.FAILURE,
+          } as AuthRejectionInterface)
           return
         }
         reject({
           reason: "Failed to create user",
-          status: SignUpStatusEnum.FAILURE,
-        })
+          status: AuthStatusEnum.FAILURE,
+        } as AuthRejectionInterface)
         return
       })
   })
@@ -70,6 +80,29 @@ const sendVerificationEmail = (): Promise<boolean> => {
   })
 }
 
-const login = (email: string, password: string) => {}
+const login = (
+  email: string,
+  password: string
+): Promise<SignInResponseInterface> => {
+  let user: User
+  return signInWithEmailAndPassword(firebaseAuth, email, password)
+    .then((userCredential: UserCredential) => {
+      user = userCredential.user
+      return user.getIdToken()
+    })
+    .then((token) => {
+      return {
+        access_token: token,
+        refresh_token: user.refreshToken,
+      }
+    })
+    .catch((error) => {
+      console.log("error", error)
+      return Promise.reject({
+        reason: AuthStatusReasonEnum.FAILED_TO_LOGIN,
+        status: AuthStatusEnum.FAILURE,
+      } as AuthRejectionInterface)
+    })
+}
 
 export { signup, sendVerificationEmail, login }

@@ -1,4 +1,4 @@
-import { SignUpStatusEnum } from "../constants/auth_enums"
+import { AuthStatusEnum } from "../constants/auth_enums"
 
 export interface SignInResponseInterface {
   access_token: string
@@ -7,7 +7,7 @@ export interface SignInResponseInterface {
 
 export interface SignUpResponseInterface {
   user_id?: string
-  status: SignUpStatusEnum
+  status: AuthStatusEnum
   reason?: string
 }
 
@@ -16,4 +16,14 @@ export interface SignUpRequestInterface {
   password: string
   first_name: string
   last_name: string
+}
+
+export interface SignInRequestInterface {
+  email: string
+  password: string
+}
+
+export interface AuthRejectionInterface {
+  reason: string
+  status: AuthStatusEnum
 }
