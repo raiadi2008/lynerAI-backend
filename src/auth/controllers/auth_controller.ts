@@ -6,6 +6,7 @@ import {
 } from "../types/auth_types"
 import AuthDB from "../db/auth_db"
 import { IUser } from "../model/auth_models"
+import { HttpStatusCodes } from "../../global_constants/constants"
 
 /**
  * @function signupController
@@ -15,24 +16,31 @@ import { IUser } from "../model/auth_models"
  */
 
 export const signupController = (req: Request, res: Response) => {
+  console.log("this reached here bro as well")
   const user_info: SignUpRequestInterface = req.body
+
+  // check if email already exist
+  AuthDB.check(user_info.email)
+
+  // create user in firebase
   signup(user_info.email, user_info.password)
     .then((firebase_response: SignUpResponseInterface) => {
+      // create user in db
       AuthDB.create({
         email: user_info.email,
         first_name: user_info.first_name,
         last_name: user_info.last_name,
-        user_id: firebase_response.user_id,
+        _id: firebase_response.user_id,
       } as IUser)
         .then((db_response: IUser) => {
-          res.status(200).json(db_response)
+          return res.status(HttpStatusCodes.CREATED).json(db_response)
         })
         .catch((error) => {
-          res.status(400).json(error)
-          console.log("got db error", error)
+          const error_code = error.code || HttpStatusCodes.SERVER_ERROR
+          return res.status(error_code).json(error)
         })
     })
     .catch((error) => {
-      res.status(400).json(error)
+      return res.status(400).json(error)
     })
 }
