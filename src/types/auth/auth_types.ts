@@ -14,8 +14,9 @@ export interface SignInResponseInterface {
  */
 
 export interface SignUpResponseInterface {
-  user_id: string
+  user_id?: string
   status: SignUpStatusEnum
+  reason?: string
 }
 
 /**

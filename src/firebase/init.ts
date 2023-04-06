@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth"
+import { AuthErrorCodes } from "firebase/auth"
 
 import { SignUpResponseInterface } from "../types/auth/auth_types"
 import { SignUpStatusEnum } from "../types/auth/auth_enums"
@@ -34,12 +35,19 @@ const signup = (
           status: SignUpStatusEnum.SUCCESS,
         })
       })
-
       .catch((error) => {
+        console.log("type of error", typeof error)
+        console.log("error", error)
         const errorCode = error.code
-        const errorMessage = error.message
+        if (errorCode === AuthErrorCodes.EMAIL_EXISTS) {
+          // todo: if fails here raise an alarm
+          reject({
+            reason: "Email already exists",
+            status: SignUpStatusEnum.FAILURE,
+          })
+        }
         reject({
-          user_id: null,
+          reason: "Failed to create user",
           status: SignUpStatusEnum.FAILURE,
         })
       })
