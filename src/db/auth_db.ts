@@ -1,6 +1,6 @@
 import { rejects } from "assert"
 import { SignUpRequestInterface } from "../types/auth_types"
-import User, { IUser } from "../model/auth_models"
+import User, { IUser } from "../models/auth_models"
 
 /**
  * @function create

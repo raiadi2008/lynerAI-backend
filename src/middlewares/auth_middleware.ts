@@ -3,7 +3,7 @@ import EmailValidator from "email-validator"
 import {
   HttpReasonPhrases,
   HttpStatusCodes,
-} from "../../global_constants/constants"
+} from "../constants/global_constants"
 import AuthDB from "../db/auth_db"
 import {
   SignInRequestInterface,

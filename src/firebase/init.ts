@@ -13,11 +13,8 @@ import {
   AuthRejectionInterface,
   SignInResponseInterface,
   SignUpResponseInterface,
-} from "../auth/types/auth_types"
-import {
-  AuthStatusEnum,
-  AuthStatusReasonEnum,
-} from "../auth/constants/auth_enums"
+} from "../types/auth_types"
+import { AuthStatusEnum, AuthStatusReasonEnum } from "../constants/auth_enums"
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
