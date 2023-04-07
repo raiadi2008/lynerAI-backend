@@ -3,8 +3,8 @@ import express, { Express, Request, Response } from "express"
 import "./config/parse_config.js"
 import "./db/connect_db.js"
 
-import authRouter from "./auth/routers/auth_router.js"
-import userProjectRouter from "./user_projects/routers/user_project_routers.js"
+import authRouter from "./routers/auth_router.js"
+import userProjectRouter from "./routers/user_project_routers.js"
 
 const app: Express = express()
 const port: number = Number(process.env.PORT) || 3000

@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
-import { login, sendVerificationEmail, signup } from "../../firebase/init"
+import { login, sendVerificationEmail, signup } from "../firebase/init"
 import {
   SignUpRequestInterface,
   SignUpResponseInterface,
 } from "../types/auth_types"
 import AuthDB from "../db/auth_db"
-import { IUser } from "../model/auth_models"
-import { HttpStatusCodes } from "../../global_constants/constants"
+import { IUser } from "../models/auth_models"
+import { HttpStatusCodes } from "../constants/global_constants"
 
 /**
  * @function signupController
