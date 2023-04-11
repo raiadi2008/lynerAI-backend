@@ -8,6 +8,7 @@ export const HttpStatusCode = {
   NOT_FOUND: 404,
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
+  BAD_REQUEST: 400,
 }
 
 export const HttpStatusMessage = {
@@ -20,6 +21,7 @@ export const HttpStatusMessage = {
   NOT_FOUND: "Not Found",
   CONFLICT: "Conflict",
   INTERNAL_SERVER_ERROR: "Internal Server Error",
+  BAD_REQUEST: "Bad Request",
 }
 
 export const HttpStatusReasons = {}
