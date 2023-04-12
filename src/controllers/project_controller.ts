@@ -63,14 +63,14 @@ export const createProjectSection = (req: Request, res: Response) => {
   const user: User = req.user
   const {
     section_title,
-    text_ids = [],
-  }: { section_title: string; text_ids: string[] } = req.body
+    section_texts = [],
+  }: { section_title: string; section_texts: string[] } = req.body
 
   ProjectDB.getProjectById(id, user.id).then((project) => {
     if (project) {
       project.project_sections.push({
         section_title: section_title,
-        section_text: text_ids,
+        section_texts: section_texts,
       })
       ProjectDB.save(project)
         .then((project) => res.status(HttpStatusCode.OK).send(project))
@@ -81,4 +81,29 @@ export const createProjectSection = (req: Request, res: Response) => {
       res.status(HttpStatusCode.NOT_FOUND).send(HttpStatusMessage.NOT_FOUND)
     }
   })
+}
+
+export const addTextToProject = (req: Request, res: Response) => {
+  const { id } = req.params
+  const user: User = req.user
+  const { text }: { text: string } = req.body
+
+  ProjectDB.getProjectById(id, user.id)
+    .then((project) => {
+      if (project) {
+        project.project_text.push({
+          text,
+        })
+        ProjectDB.save(project)
+          .then((project) => res.status(HttpStatusCode.OK).send(project))
+          .catch((error) =>
+            res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)
+          )
+      } else {
+        res.status(HttpStatusCode.NOT_FOUND).send(HttpStatusMessage.NOT_FOUND)
+      }
+    })
+    .catch((error) => {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)
+    })
 }

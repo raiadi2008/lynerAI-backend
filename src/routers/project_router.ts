@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { verifyToken } from "../middleware/auth_middlewares"
 import {
+  addTextToProject,
   createProject,
   createProjectSection,
   getProjectById,
@@ -25,6 +26,6 @@ projectRouter.route("/project/:id").get(getProjectById)
 
 projectRouter.route("/project/:id/sections").post(createProjectSection)
 
-projectRouter.route("/project/:id/texts").post().put().delete()
+projectRouter.route("/project/:id/texts").post(addTextToProject)
 
 export default projectRouter
