@@ -9,5 +9,6 @@ if (process.env.NODE_ENV === DEV_ENV) {
 } else if (process.env.NODE_ENV === PROD_ENV) {
   dotenv.config({ path: path.resolve(__dirname, "./.env.prod") })
 } else {
-  dotenv.config({ path: path.resolve(__dirname, "./.env") })
+  console.log("the path", path.resolve(process.cwd(), ".env"))
+  dotenv.config({ path: path.resolve(process.cwd(), ".env") })
 }

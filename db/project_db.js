@@ -1,22 +1,22 @@
 import { Model } from "mongoose"
-import Project, { IProject, TProject } from "../models/project_model"
-import { IProjectInfo, IProjectList } from "../types/project"
+import Project from "../models/project_model.js"
 
-const create = (project: IProject): Promise<IProject> => {
+
+const create = (project) => {
   const newProject = new Project(project)
   return newProject.save()
 }
 
-const save = async (project: TProject): Promise<TProject> => {
+const save = async (project) => {
   project = await project.save()
   return project
 }
 
 const getProjects = async (
-  limit: number,
-  page: number,
-  user_id: string
-): Promise<IProjectInfo[]> => {
+  limit,
+  page,
+  user_id
+) => {
   const projects = await Project.find({
     created_by: user_id,
   })
@@ -26,7 +26,7 @@ const getProjects = async (
     .lean(true)
     .exec()
 
-  const projectList: IProjectInfo[] = []
+  const projectList = []
 
   projects.forEach((project) => {
     projectList.push({
@@ -35,16 +35,13 @@ const getProjects = async (
       project_description: project.project_description,
       created_at: project.created_at,
       created_by: project.created_by,
-    } as IProjectInfo)
+    })
   })
 
   return projectList
 }
 
-const getProjectById = async (
-  id: string,
-  user_id: string
-): Promise<TProject | null> => {
+const getProjectById = async (id, user_id) => {
   try {
     const project = await Project.findOne({
       _id: id,

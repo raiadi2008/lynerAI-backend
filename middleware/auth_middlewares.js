@@ -1,12 +1,10 @@
-import { Request, Response, NextFunction } from "express"
-import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants"
-import { User } from "../types/users"
-import { validateIdToken } from "../firebase/init"
+import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants.js"
+import { validateIdToken } from "../firebase/init.js"
 
 export const verifyToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
+  req,
+  res,
+  next
 ) => {
   const authHeader = req.headers.authorization
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -22,7 +20,7 @@ export const verifyToken = (
         id: decodedToken.uid,
         email: decodedToken.email,
         name: decodedToken.name,
-      } as User
+      }
       next()
     })
     .catch((error) => {
@@ -31,3 +29,5 @@ export const verifyToken = (
         .send(HttpStatusMessage.UNAUTORIZED)
     })
 }
+
+

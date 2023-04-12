@@ -1,18 +1,10 @@
-import { Request, Response } from "express"
-import { User } from "../types/users"
-import ProjectDB from "../db/project_db"
-import { ICreateProjectRequest, IProjectInfo } from "../types/project"
-import {
-  IProject,
-  IProjectSections,
-  IProjectTexts,
-} from "../models/project_model"
-import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants"
-import { Types } from "mongoose"
+import ProjectDB from "../db/project_db.js"
+import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants.js"
 
-export const createProject = (req: Request, res: Response) => {
-  const user: User = req.user
-  const project: ICreateProjectRequest = req.body
+
+export const createProject = (req, res) => {
+  const user = req.user
+  const project = req.body
 
   ProjectDB.create({
     project_name: project.project_name,
@@ -20,9 +12,9 @@ export const createProject = (req: Request, res: Response) => {
     created_at: new Date(),
     updated_at: new Date(),
     created_by: user.id,
-    project_sections: [] as IProjectSections[],
-    project_text: [] as IProjectTexts[],
-  } as IProject)
+    project_sections: [],
+    project_text: [],
+  })
     .then((project) => {
       res.status(HttpStatusCode.CREATED).send(project)
     })
@@ -31,11 +23,11 @@ export const createProject = (req: Request, res: Response) => {
     })
 }
 
-export const getProjects = (req: Request, res: Response) => {
+export const getProjects = (req, res) => {
   const { limit = 4, page = 1 } = req.query
-  const user: User = req.user
+  const user = req.user
   ProjectDB.getProjects(Number(limit), Number(page), user.id)
-    .then((projects: IProjectInfo[]) => {
+    .then((projects) => {
       res.status(HttpStatusCode.OK).send({
         projects: projects,
       })
@@ -45,9 +37,9 @@ export const getProjects = (req: Request, res: Response) => {
     })
 }
 
-export const getProjectById = (req: Request, res: Response) => {
+export const getProjectById = (req, res) => {
   const { id } = req.params
-  const user: User = req.user
+  const user = req.user
   ProjectDB.getProjectById(id, user.id)
     .then((project) => {
       if (project) res.status(HttpStatusCode.OK).send(project)
@@ -59,13 +51,13 @@ export const getProjectById = (req: Request, res: Response) => {
     })
 }
 
-export const createProjectSection = (req: Request, res: Response) => {
+export const createProjectSection = (req, res) => {
   const { id } = req.params
-  const user: User = req.user
+  const user = req.user
   const {
     section_title,
     section_texts = [],
-  }: { section_title: string; section_texts: string[] } = req.body
+  } = req.body
 
   ProjectDB.getProjectById(id, user.id).then((project) => {
     if (project) {
@@ -84,17 +76,13 @@ export const createProjectSection = (req: Request, res: Response) => {
   })
 }
 
-export const updateProjectSection = (req: Request, res: Response) => {
+export const updateProjectSection = (req, res) => {
   const { id } = req.params
-  const user: User = req.user
+  const user = req.user
   const {
     section_id,
     section_title = null,
     section_texts = null,
-  }: {
-    section_id: string
-    section_title: string | null
-    section_texts: string[] | null
   } = req.body
 
   if (section_id === null) {
@@ -136,10 +124,25 @@ export const updateProjectSection = (req: Request, res: Response) => {
     })
 }
 
-export const addTextToProject = (req: Request, res: Response) => {
+export const deleteProjectSection = async (req, res) => {
+  const { id, section_id } = req.params
+  const user = req.user
+  const project = await ProjectDB.getProjectById(id, user.id)
+
+  if (project) {
+    const filtered_sections = project.project_sections.filter(
+      (section) => section._id.toString() !== section_id
+    )
+    project.project_sections = filtered_sections
+  }
+
+
+}
+
+export const addTextToProject = (req, res) => {
   const { id } = req.params
-  const user: User = req.user
-  const { text }: { text: string } = req.body
+  const user = req.user
+  const { text } = req.body
 
   ProjectDB.getProjectById(id, user.id)
     .then((project) => {

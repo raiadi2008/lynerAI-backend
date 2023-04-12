@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": " concurrently \"npx tsc -w\" \"cp ./src/config/.env.* dist/config  && NODE_ENV=DEV nodemon dist/index.js\"",
-    "prebuild": "npm run delete && npx tsc && cp ./src/config/lynerai-dev-firebase-key.json dist/config",
-    "delete": "rm -rf dist",
-    "build": "npm run delete && npm run prebuild",
-    "start:prod": "NODE_ENV=PROD node dist/index.js"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",

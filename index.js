@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express"
+import express from "express"
 import cors from "cors"
 
 import "./config/parse_config.js"
@@ -6,8 +6,8 @@ import "./db/connect_db.js"
 import firebase from "./firebase/init.js"
 import projectRouter from "./routers/project_router.js"
 
-const app: Express = express()
-const port: number = Number(process.env.PORT) || 3000
+const app = express()
+const port = process.env.PORT || 3000
 
 // middleware
 app.use(express.json({ limit: 1024 }))

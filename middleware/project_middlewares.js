@@ -1,11 +1,9 @@
-import { Request, Response, NextFunction } from "express"
+import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants.js"
 
-import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants"
-
-export const verifyCreateProjectRequestMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
+const verifyCreateProjectRequestMiddleware = (
+  req,
+  res,
+  next
 ) => {
   const { project_name, project_description } = req.body
   if (!project_name || !project_description) {
@@ -19,3 +17,5 @@ export const verifyCreateProjectRequestMiddleware = (
   }
   next()
 }
+
+export { verifyCreateProjectRequestMiddleware }
