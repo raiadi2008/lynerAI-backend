@@ -128,14 +128,15 @@ export const deleteProjectSection = async (req, res) => {
   const { id, section_id } = req.params
   const user = req.user
   const project = await ProjectDB.getProjectById(id, user.id)
-
   if (project) {
-    const filtered_sections = project.project_sections.filter(
+    project.project_sections = project.project_sections.filter(
       (section) => section._id.toString() !== section_id
     )
-    project.project_sections = filtered_sections
+  } else {
+    return res.status(HttpStatusCode.NOT_FOUND).send(HttpStatusMessage.NOT_FOUND)
   }
-
+  const result = await ProjectDB.save(project)
+  res.status(HttpStatusCode.OK).send(result)
 
 }
 

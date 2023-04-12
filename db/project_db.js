@@ -2,7 +2,7 @@ import { Model } from "mongoose"
 import Project from "../models/project_model.js"
 
 
-const create = (project) => {
+const create = async (project) => {
   const newProject = new Project(project)
   return newProject.save()
 }
