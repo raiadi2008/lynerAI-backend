@@ -6,6 +6,7 @@ import {
   createProjectSection,
   getProjectById,
   getProjects,
+  updateProjectSection,
 } from "../controllers/project_controller"
 import { verifyCreateProjectRequestMiddleware } from "../middleware/project_middlewares"
 
@@ -24,7 +25,10 @@ projectRouter.route("/project/:id").get(getProjectById)
 
 // ----
 
-projectRouter.route("/project/:id/sections").post(createProjectSection)
+projectRouter
+  .route("/project/:id/sections")
+  .post(createProjectSection)
+  .put(updateProjectSection)
 
 projectRouter.route("/project/:id/texts").post(addTextToProject)
 

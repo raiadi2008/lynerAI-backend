@@ -8,6 +8,7 @@ import {
   IProjectTexts,
 } from "../models/project_model"
 import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants"
+import { Types } from "mongoose"
 
 export const createProject = (req: Request, res: Response) => {
   const user: User = req.user
@@ -81,6 +82,58 @@ export const createProjectSection = (req: Request, res: Response) => {
       res.status(HttpStatusCode.NOT_FOUND).send(HttpStatusMessage.NOT_FOUND)
     }
   })
+}
+
+export const updateProjectSection = (req: Request, res: Response) => {
+  const { id } = req.params
+  const user: User = req.user
+  const {
+    section_id,
+    section_title = null,
+    section_texts = null,
+  }: {
+    section_id: string
+    section_title: string | null
+    section_texts: string[] | null
+  } = req.body
+
+  if (section_id === null) {
+    return res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send(HttpStatusMessage.BAD_REQUEST)
+  }
+
+  ProjectDB.getProjectById(id, user.id)
+    .then((project) => {
+      if (project) {
+        project.project_sections.forEach((section) => {
+          if (section._id.toString() === section_id) {
+            if (section_title) section.section_title = section_title
+            if (section_texts) {
+              while (section.section_texts.length > 0) {
+                section.section_texts.pop()
+              }
+              section_texts.forEach((text) => {
+                section.section_texts.push(text)
+              })
+            }
+          }
+        })
+
+        ProjectDB.save(project)
+          .then((project) => {
+            res.status(HttpStatusCode.OK).send(project)
+          })
+          .catch((err) => {
+            res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(err)
+          })
+      } else {
+        res.status(HttpStatusCode.NOT_FOUND).send(HttpStatusMessage.NOT_FOUND)
+      }
+    })
+    .catch((error) => {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)
+    })
 }
 
 export const addTextToProject = (req: Request, res: Response) => {
