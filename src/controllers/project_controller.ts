@@ -2,8 +2,12 @@ import { Request, Response } from "express"
 import { User } from "../types/users"
 import ProjectDB from "../db/project_db"
 import { ICreateProjectRequest, IProjectInfo } from "../types/project"
-import { IProjectInterface, IProjectSections } from "../models/project_model"
-import { HttpStatusCode } from "../constants/http_constants"
+import {
+  IProject,
+  IProjectSections,
+  IProjectTexts,
+} from "../models/project_model"
+import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants"
 
 export const createProject = (req: Request, res: Response) => {
   const user: User = req.user
@@ -16,8 +20,8 @@ export const createProject = (req: Request, res: Response) => {
     updated_at: new Date(),
     created_by: user.id,
     project_sections: [] as IProjectSections[],
-    default_text: [] as string[],
-  } as IProjectInterface)
+    project_text: [] as IProjectTexts[],
+  } as IProject)
     .then((project) => {
       res.status(HttpStatusCode.CREATED).send(project)
     })
@@ -34,6 +38,20 @@ export const getProjects = (req: Request, res: Response) => {
       res.status(HttpStatusCode.OK).send({
         projects: projects,
       })
+    })
+    .catch((error) => {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)
+    })
+}
+
+export const getProjectById = (req: Request, res: Response) => {
+  const { id } = req.params
+  const user: User = req.user
+  ProjectDB.getProjectById(id, user.id)
+    .then((project) => {
+      if (project) res.status(HttpStatusCode.OK).send(project)
+      else
+        res.status(HttpStatusCode.NOT_FOUND).send(HttpStatusMessage.NOT_FOUND)
     })
     .catch((error) => {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)

@@ -3,20 +3,37 @@ import mongoose, { Schema, Model, Types } from "mongoose"
 interface IProjectSections {
   _id: Types.ObjectId
   section_title: string
-  section_texts: Types.Array<string>
+  section_texts: Types.Array<Types.ObjectId>
 }
 
-interface IProjectInterface {
+interface IProjectTexts {
+  _id: Types.ObjectId
+  text: string
+}
+interface IProject {
+  _id: Types.ObjectId
   project_name: string
   project_description: string
   created_by: string // uid of use who created the project
   created_at: Date
   updated_at: Date
   project_sections: Types.DocumentArray<IProjectSections>
-  default_text: Types.Array<string>
+  project_text: Types.DocumentArray<IProjectTexts>
 }
 
-const ProjectSchema = new Schema<IProjectInterface, Model<IProjectInterface>>({
+const ProjectSectionsSchema = new Schema<
+  IProjectSections,
+  Model<IProjectSections>
+>({
+  section_title: { type: String, required: true },
+  section_texts: [Types.ObjectId],
+})
+
+const ProjectTextSchema = new Schema<IProjectTexts, Model<IProjectTexts>>({
+  text: { type: String, required: true },
+})
+
+const ProjectSchema = new Schema<IProject, Model<IProject>>({
   project_name: { type: String, required: true },
   project_description: { type: String, required: true },
   created_by: { type: String, required: true },
@@ -25,13 +42,24 @@ const ProjectSchema = new Schema<IProjectInterface, Model<IProjectInterface>>({
   project_sections: [
     {
       section_title: { type: String, required: true },
-      section_texts: [String],
+      section_texts: [Types.ObjectId],
     },
   ],
-  default_text: [String],
+  project_text: [
+    {
+      text: { type: String, required: true },
+    },
+  ],
 })
 
 const Project = mongoose.model("Project", ProjectSchema)
 
 export default Project
-export { IProjectInterface, IProjectSections }
+export {
+  IProject,
+  IProjectSections,
+  IProjectTexts,
+  ProjectSectionsSchema,
+  ProjectTextSchema,
+  ProjectSchema,
+}

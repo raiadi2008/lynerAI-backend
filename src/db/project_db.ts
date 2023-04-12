@@ -1,7 +1,7 @@
-import Project, { IProjectInterface } from "../models/project_model"
+import Project, { IProject } from "../models/project_model"
 import { IProjectInfo, IProjectList } from "../types/project"
 
-const create = (project: IProjectInterface): Promise<IProjectInterface> => {
+const create = (project: IProject): Promise<IProject> => {
   const newProject = new Project(project)
   return newProject.save()
 }
@@ -14,7 +14,7 @@ const getProjects = async (
   const projects = await Project.find({
     created_by: user_id,
   })
-    .select("project_name project_description created_at created_by")
+    .select("_id project_name project_description created_at created_by")
     .limit(limit)
     .skip((page - 1) * limit)
     .lean(true)
@@ -24,6 +24,7 @@ const getProjects = async (
 
   projects.forEach((project) => {
     projectList.push({
+      _id: project._id.toString(),
       project_name: project.project_name,
       project_description: project.project_description,
       created_at: project.created_at,
@@ -34,9 +35,25 @@ const getProjects = async (
   return projectList
 }
 
+const getProjectById = async (
+  id: string,
+  user_id: string
+): Promise<IProject | null> => {
+  try {
+    const project = await Project.findOne({
+      _id: id,
+      created_by: user_id,
+    }).exec()
+    return project
+  } catch (error) {
+    return null
+  }
+}
+
 const ProjectDB = {
   create,
   getProjects,
+  getProjectById,
 }
 
 export default ProjectDB

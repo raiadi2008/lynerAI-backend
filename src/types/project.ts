@@ -4,6 +4,7 @@ export interface ICreateProjectRequest {
 }
 
 export interface IProjectInfo {
+  _id: string
   project_name: string
   project_description: string
   created_at: Date
