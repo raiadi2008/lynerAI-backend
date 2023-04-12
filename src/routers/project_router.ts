@@ -2,6 +2,7 @@ import { Router } from "express"
 import { verifyToken } from "../middleware/auth_middlewares"
 import {
   createProject,
+  createProjectSection,
   getProjectById,
   getProjects,
 } from "../controllers/project_controller"
@@ -20,7 +21,9 @@ projectRouter.route("/projects").get(getProjects)
 
 projectRouter.route("/project/:id").get(getProjectById)
 
-projectRouter.route("/project/:id/sections").post().put().delete()
+// ----
+
+projectRouter.route("/project/:id/sections").post(createProjectSection)
 
 projectRouter.route("/project/:id/texts").post().put().delete()
 

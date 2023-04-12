@@ -1,4 +1,4 @@
-import mongoose, { Schema, Model, Types } from "mongoose"
+import mongoose, { Schema, Model, Types, Document } from "mongoose"
 
 interface IProjectSections {
   _id: Types.ObjectId
@@ -54,6 +54,12 @@ const ProjectSchema = new Schema<IProject, Model<IProject>>({
 
 const Project = mongoose.model("Project", ProjectSchema)
 
+// to use when we want to return
+// functions of document
+type TProject = Document & IProject
+type TProjectSections = Document & IProjectSections
+type TProjectTexts = Document & IProjectTexts
+
 export default Project
 export {
   IProject,
@@ -62,4 +68,7 @@ export {
   ProjectSectionsSchema,
   ProjectTextSchema,
   ProjectSchema,
+  TProject,
+  TProjectSections,
+  TProjectTexts,
 }

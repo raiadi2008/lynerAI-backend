@@ -57,3 +57,28 @@ export const getProjectById = (req: Request, res: Response) => {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)
     })
 }
+
+export const createProjectSection = (req: Request, res: Response) => {
+  const { id } = req.params
+  const user: User = req.user
+  const {
+    section_title,
+    text_ids = [],
+  }: { section_title: string; text_ids: string[] } = req.body
+
+  ProjectDB.getProjectById(id, user.id).then((project) => {
+    if (project) {
+      project.project_sections.push({
+        section_title: section_title,
+        section_text: text_ids,
+      })
+      ProjectDB.save(project)
+        .then((project) => res.status(HttpStatusCode.OK).send(project))
+        .catch((error) => {
+          res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send(error)
+        })
+    } else {
+      res.status(HttpStatusCode.NOT_FOUND).send(HttpStatusMessage.NOT_FOUND)
+    }
+  })
+}
