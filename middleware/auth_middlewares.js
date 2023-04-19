@@ -1,11 +1,10 @@
-import { HttpStatusCode, HttpStatusMessage } from "../constants/http_constants.js"
+import {
+  HttpStatusCode,
+  HttpStatusMessage,
+} from "../constants/http_constants.js"
 import { validateIdToken } from "../firebase/init.js"
 
-export const verifyToken = (
-  req,
-  res,
-  next
-) => {
+export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res
@@ -29,5 +28,3 @@ export const verifyToken = (
         .send(HttpStatusMessage.UNAUTORIZED)
     })
 }
-
-

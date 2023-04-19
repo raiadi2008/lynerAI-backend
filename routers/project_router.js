@@ -5,6 +5,7 @@ import {
   createProject,
   createProjectSection,
   deleteProjectSection,
+  deleteTexts,
   getProjectById,
   getProjects,
   updateProjectSection,
@@ -24,8 +25,6 @@ projectRouter.route("/projects").get(getProjects)
 
 projectRouter.route("/project/:id").get(getProjectById)
 
-// ----
-
 projectRouter
   .route("/project/:id/sections")
   .post(createProjectSection)
@@ -34,5 +33,8 @@ projectRouter
 projectRouter.route("/project/:id/:section_id").delete(deleteProjectSection)
 
 projectRouter.route("/project/:id/texts").post(addTextToProject)
+
+projectRouter.route("/project/:id/:text_id/:section_id?").delete(deleteTexts)
+
 
 export default projectRouter

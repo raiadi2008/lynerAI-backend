@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "NODE_ENV=DEV nodemon index.js"
   },
   "repository": {
     "type": "git",
